@@ -61,6 +61,20 @@ Cochez les options suivantes dans la section "Pull Requests":
 6. Avant chaque démo: PR de `develop` vers `main`
 7. **Merge commit** pour garder l'historique complet
 
+**Workflow hotfix (correction urgente sur `main`):**
+
+1. Si un bug critique est découvert en production (`main`):
+   ```bash
+   git checkout -b hotfix/nom-du-bug main
+   ```
+2. Corriger le bug et tester
+3. Push: `git push -u origin hotfix/nom-du-bug`
+4. Créer une PR vers `main` avec **merge commit**
+5. Approuver et fusionner immédiatement
+6. **Important:** Créer une deuxième PR de `hotfix/*` vers `develop` pour synchroniser
+7. Supprimer la branche `hotfix/*` après fusion
+8. **Tag optionnel sur `main`:** `v1.0.1`, `v1.0.2`, etc.
+
 ### 3. Configurer les Rulesets sur `develop` et `main`
 
 Allez dans **Settings → Rules → Rulesets** et créez 2 rulesets:
