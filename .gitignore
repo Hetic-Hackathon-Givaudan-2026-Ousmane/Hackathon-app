@@ -1,0 +1,7 @@
+# Données PostgreSQL (dossier monté par compose.yaml, propre à chaque poste)
+.DS_Store
+node_modules/
+dist/
+.env
+db/data/
+.vite/

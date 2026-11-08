@@ -1,0 +1,49 @@
+{
+  "name": "Hackathon",
+  // L'éditeur (VS Code ou Zed) démarre toute la stack, puis s'attache au service « dev »
+  "dockerComposeFile": ["../compose.yaml"],
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "remoteUser": "node",
+
+  // Outils en plus de l'image : ici, la CLI GitHub (gh)
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+  },
+
+  // Les mêmes extensions et réglages pour toute l'équipe
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "github.vscode-pull-request-github",
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
+      },
+    },
+    // Zed ne lit ici que les extensions : ses réglages sont dans .zed/settings.json
+    // (ESLint et Prettier sont intégrés à Zed, pas besoin d'extension)
+    "zed": {
+      "extensions": ["dockerfile", "docker-compose"],
+    },
+  },
+
+  // L'API, le front, et PostgreSQL pour un client comme TablePlus
+  // ⚠ Zed : ces ports sont publiés via Docker sur TOUTES les interfaces (accessibles
+  // depuis le réseau, ex. le Wi-Fi de l'école), pas seulement sur votre machine
+  // comme avec VS Code. Dans le conteneur, écoutez sur 0.0.0.0 (ex. `vite --host`).
+  "forwardPorts": [3000, 5173, "db:5432"],
+
+  // Une fois, à la création : les dépendances, et le fichier .env local.
+  // Forme tableau obligatoire pour Zed : il casse la forme chaîne (il la relance
+  // dans un second `sh -c` sans guillemets, et seul `git` est exécuté).
+  // Pas d'argument contenant des espaces : Zed les recolle sans guillemets.
+  // D'où le script : les `&&` et `||` y sont, pas ici.
+  "postCreateCommand": ["sh", "/workspace/.devcontainer/post-create.sh"],
+}

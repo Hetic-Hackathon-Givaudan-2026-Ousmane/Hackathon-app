@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": [".devcontainer/devcontainer.json", ".zed/settings.json"],
+      "options": { "parser": "jsonc" }
+    }
+  ]
+}

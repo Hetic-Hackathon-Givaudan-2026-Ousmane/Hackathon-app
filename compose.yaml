@@ -1,0 +1,59 @@
+# La stack de développement. Versions figées : les mêmes qu'en production.
+name: hackathon
+
+services:
+  # Le poste de travail : l'éditeur (VS Code ou Zed) s'y attache, on y lance l'API et le front
+  dev:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    # Redémarre avec Docker (reboot du Mac, d'OrbStack…) : sinon Zed ne peut plus
+    # se reconnecter depuis ses projets récents. Un arrêt volontaire reste respecté.
+    restart: unless-stopped
+    # Les ports (API, front, PostgreSQL) sont dans devcontainer.json → forwardPorts
+    ports:
+      - '3000:3000'
+      - '5173:5173'
+    volumes:
+      - .:/workspace:cached
+    extra_hosts:
+      # Rend l'hôte joignable sous Linux (Docker Desktop le fait déjà)
+      - host.docker.internal:host-gateway
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # L'IA : Ollama avec le modèle llama3.2:1b
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - '11434:11434'
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+
+  # La base de données
+  db:
+    image: postgres:17
+    # Redémarre avec Docker, comme « dev » (sinon l'API repart sans sa base)
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: app
+    volumes:
+      # Les données, dans un dossier du projet (ignoré par git)
+      - ./db/data:/var/lib/postgresql/data
+      # Schéma et données de test, joués au premier démarrage
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U app -d app']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  ollama_data:
