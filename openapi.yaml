@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: Hackathon App API
+  description: API du prototype de détecteur de tendances et de questions IA.
+  version: 0.1.0
+servers:
+  - url: http://localhost:3000
+    description: API du dev container
+paths:
+  /api/health:
+    get:
+      operationId: getHealth
+      summary: Vérifier l'API et sa connexion à PostgreSQL
+      responses:
+        '200':
+          description: API accessible et base de données connectée.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+  /api/questions:
+    get:
+      operationId: listQuestions
+      summary: Lister les dix questions les plus récentes
+      responses:
+        '200':
+          description: Questions triées de la plus récente à la plus ancienne.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 10
+                items:
+                  $ref: '#/components/schemas/Question'
+    post:
+      operationId: createQuestion
+      summary: Poser une question à l'IA et enregistrer sa réponse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question
+              properties:
+                question:
+                  type: string
+                  minLength: 1
+                  description: Texte de la question ; les espaces de début et fin sont retirés.
+      responses:
+        '201':
+          description: Question et réponse enregistrées.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+        '400':
+          description: Question absente ou vide après suppression des espaces.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur interne, de base de données ou du fournisseur IA.
+components:
+  schemas:
+    Health:
+      type: object
+      required:
+        - status
+        - db
+      properties:
+        status:
+          type: string
+          const: ok
+        db:
+          type: string
+          description: Version renvoyée par PostgreSQL.
+    Question:
+      type: object
+      required:
+        - id
+        - question
+        - answer
+        - created_at
+      properties:
+        id:
+          type: integer
+        question:
+          type: string
+        answer:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
