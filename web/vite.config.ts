@@ -1,11 +1,22 @@
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  plugins: [react()],
   server: {
-    // Toutes les interfaces, comme --host : par défaut, Vite n'écoute que sur
-    // localhost, et le port n'est pas joignable hors du conteneur
     host: true,
-    // Les appels /api partent vers l'API, dans le même conteneur
+    port: 5173,
     proxy: { '/api': 'http://localhost:3000' },
+  },
+  build: {
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/three')) return 'three';
+          if (id.includes('@react-three')) return 'r3f';
+        },
+      },
+    },
   },
 });

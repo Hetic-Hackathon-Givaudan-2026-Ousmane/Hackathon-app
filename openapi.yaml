@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Hackathon App API
-  description: API du prototype de détecteur de tendances et de questions IA.
+  description: API du prototype Passerelle et de ses fiches de tendance.
   version: 0.1.0
 servers:
   - url: http://localhost:3000
@@ -63,6 +63,52 @@ paths:
                 $ref: '#/components/schemas/Error'
         '500':
           description: Erreur interne, de base de données ou du fournisseur IA.
+  /api/verdict:
+    post:
+      operationId: createTrendVerdict
+      summary: Générer une proposition de suivi pour une tendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrendRequest'
+      responses:
+        '200':
+          description: Verdict généré ou réponse de secours explicitement signalée.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendVerdict'
+        '404':
+          description: Identifiant de tendance inconnu.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
+  /api/brief:
+    post:
+      operationId: createTrendBrief
+      summary: Générer un brief pour une tendance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrendRequest'
+      responses:
+        '200':
+          description: Brief généré ou réponse de secours explicitement signalée.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendBrief'
+        '404':
+          description: Identifiant de tendance inconnu.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
 components:
   schemas:
     Health:
@@ -100,4 +146,60 @@ components:
         - error
       properties:
         error:
+          type: string
+    TrendRequest:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Identifiant d'une fiche Passerelle.
+    TrendVerdict:
+      type: object
+      required:
+        - verdict
+        - justification
+        - limites
+        - source
+      properties:
+        verdict:
+          type: string
+          enum: [Suivre, Observer, Ignorer]
+        justification:
+          type: string
+        limites:
+          type: string
+        source:
+          type: string
+          enum: [ia, secours]
+        model:
+          type: string
+    TrendBrief:
+      type: object
+      required:
+        - brief
+        - source
+      properties:
+        brief:
+          type: object
+          required: [pourquoi, fenetre, reserve]
+          properties:
+            pourquoi:
+              type: string
+            fenetre:
+              type: string
+            reserve:
+              type: string
+        source:
+          type: string
+          enum: [ia, secours]
+        model:
+          type: string
+    TrendError:
+      type: object
+      required:
+        - erreur
+      properties:
+        erreur:
           type: string

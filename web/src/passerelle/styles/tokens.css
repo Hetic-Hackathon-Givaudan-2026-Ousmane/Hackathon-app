@@ -1,0 +1,37 @@
+/* Charte Givaudan (givaudan.com, "Human by nature") : une seule source de vérité. */
+:root {
+  --white: #ffffff;
+  --soft: #f2f2f2; /* zones secondaires, barre de décision, survols */
+  --ink: #0b1215; /* texte principal */
+  --muted: #767676; /* texte secondaire, dates, sources */
+  --line: #e6e6e6; /* bordures et séparateurs, 1 px */
+
+  --taste: #677000; /* Goût : division Taste & Wellbeing */
+  --perfume: #78608d; /* Parfum : division Fragrance & Beauty */
+  --fact: #3a5c24; /* pastille Fait */
+  --press: #be5800; /* pastilles Récit de presse et À confirmer */
+
+  --font: 'Jost', Futura, 'Century Gothic', sans-serif;
+
+  --text-h1: 44px;
+  --text-h2: 28px;
+  --text-h3: 20px;
+  --text-body: 16px;
+  --text-small: 14px;
+
+  --radius: 4px;
+  --gutter: 80px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --z-scene: 0;
+  --z-hud: 10;
+  --z-bar: 20;
+}
+
+@media (max-width: 899px) {
+  :root {
+    --gutter: 24px;
+    --text-h1: 36px;
+    --text-h2: 24px;
+  }
+}

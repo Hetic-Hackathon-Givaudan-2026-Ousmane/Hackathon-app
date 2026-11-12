@@ -1,0 +1,142 @@
+/* Légende en bandeau bas, comme la barre de décision des fiches. */
+.legend {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-hud);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 32px;
+  min-height: 80px;
+  padding: 12px var(--gutter);
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+
+.heading {
+  font-size: var(--text-body);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1.4fr 1fr;
+  gap: 32px;
+  margin: 0;
+}
+
+.item {
+  display: grid;
+  gap: 2px;
+  align-content: start;
+}
+
+.item dt {
+  font-size: var(--text-small);
+  font-weight: 500;
+}
+
+.item dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+
+.keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.keys span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+}
+
+.foot {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.tag {
+  padding: 2px 8px;
+  border: 1px solid var(--press);
+  border-radius: var(--radius);
+  color: var(--press);
+  font-size: var(--text-small);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: var(--text-small);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.toggle:hover {
+  color: var(--ink);
+}
+
+:global([data-intro='running']) .legend {
+  visibility: hidden;
+}
+
+@media (max-width: 1279px) {
+  .legend {
+    gap: 24px;
+  }
+  .heading {
+    display: none;
+  }
+  .legend {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .list {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 899px) {
+  .legend {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .heading {
+    display: none;
+  }
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
+  }
+  .foot {
+    justify-items: start;
+    grid-auto-flow: column;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 599px) {
+  .legend {
+    padding: 8px var(--gutter) 12px;
+    gap: 8px;
+  }
+  .list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .item:first-child,
+  .item:last-child {
+    display: none;
+  }
+}

@@ -1,180 +1,168 @@
-# Hackathon App
+# Passerelle
 
-Une API (Express + PostgreSQL) et un front (React/Vite) pour poser des questions à une IA.
+Passerelle est un prototype de détecteur de tendances qui explore le passage
+d'un signal observé dans le goût vers la parfumerie. Une place interactive
+présente huit tendances, leurs sources, une proposition de suivi et un brief
+destiné aux équipes goût et parfum.
 
-Tout tourne dans un dev container : il suffit d'installer Docker et un éditeur, pas Node ni PostgreSQL.
+Le projet comprend une interface React/TypeScript avec Vite et Three.js, une API
+Express/TypeScript et une base PostgreSQL. Il est conçu pour être lancé dans le
+dev container du dépôt.
 
-## 📋 Prérequis (avant de cloner)
+## Parcours de démonstration
 
-### Système
+- **La place** (`/`) : vue interactive des huit tendances.
+- **Fiche tendance** (`/tendance/:id`) : indicateurs, chronologie, sources et
+  proposition de Passerelle.
+- **Sources** (`/tendance/:id/sources`) : consulter et marquer les sources à
+  vérifier.
+- **Brief** (`/tendance/:id/brief`) : préparer un brief relu par l'utilisateur.
+- **Tableau de bord** (`/tableau-de-bord`) : comparer les huit tendances.
 
-- **Mac** : [OrbStack](https://orbstack.dev) (recommandé) ou [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- **Windows/Linux** : [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+Le chocolat de Dubaï et pistache est le seul cas présenté comme réel ; les
+autres tendances sont des exemples simulés. Les sources et dates affichées
+doivent être vérifiées avant toute utilisation hors démonstration. Les décisions
+de l'utilisateur et les statuts de vérification sont conservés dans le stockage
+local du navigateur.
 
-### Éditeur
+## Démarrage
 
-- **VS Code** (recommandé) :
-  - Extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-- **Zed** :
-  - Support natif des dev containers
-- **Autre** : tout éditeur supportant les dev containers
+### Prérequis
 
-### Pour l'IA (local uniquement)
+- Docker Desktop ou OrbStack.
+- Un éditeur compatible avec les dev containers, par exemple VS Code avec
+  l'extension [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers), ou Zed.
 
-- [Ollama](https://ollama.com) (facultatif, voir section [Fournisseur IA](#fournisseur-ia))
-- Après installation : `ollama pull llama3.2:1b`
+Node.js et PostgreSQL sont fournis par la configuration du conteneur.
 
-## 🚀 Démarrage Rapide
-
-### 1. Cloner le dépôt
+### Ouvrir le dépôt dans le conteneur
 
 ```bash
 git clone https://github.com/Hetic-Hackathon-Givaudan-2026-Ousmane/Hackathon-app.git
 cd Hackathon-app
 ```
 
-### 2. Ouvrir dans le dev container
+Dans VS Code, ouvrez le dossier et choisissez **Reopen in Container**. Dans
+Zed, utilisez **Open in Container**. À la première ouverture, le conteneur
+installe les dépendances et crée `api/.env` depuis `api/.env.example`.
 
-**VS Code :**
+### Lancer l'application
 
-1. Ouvrir le dossier dans VS Code
-2. Une popup propose : **Reopen in Container**
-3. Cliquer dessus (ou Cmd+Shift+P → "Dev Containers: Reopen in Container")
-4. Patienter 2-3 min (construction du conteneur, PostgreSQL, dépendances)
-
-**Zed :**
-
-1. Ouvrir le dossier dans Zed
-2. Menu → **Dev Containers** → **Open in Container**
-3. Patienter 2-3 min
-
-### 3. Lancer le projet
-
-Toujours dans le terminal de l'éditeur (dans le conteneur) :
+Dans un terminal **du conteneur** :
 
 ```bash
 npm run dev
 ```
 
-### 4. Accéder à l'app
+- Interface : <http://localhost:5173>
+- API et connexion PostgreSQL : <http://localhost:3000/api/health>
+- PostgreSQL : hôte `db`, port `5432`, base `app`
 
-- **Frontend** : http://localhost:5173
-- **API** : http://localhost:3000/api/health
-- **PostgreSQL** : `localhost:5432/app` (connexion depuis le conteneur)
+Le service PostgreSQL est démarré par Docker Compose avec le conteneur. Le point
+de santé doit renvoyer un statut `ok` et la version de PostgreSQL.
 
-## 📁 Structure du Projet
+## Fournisseur IA
 
-```
-.
-├── api/                    # Backend API (Express + TypeScript)
-│   ├── src/
-│   │   ├── index.ts        # Point d'entrée
-│   │   ├── routes/         # Endpoints de l'API
-│   │   └── ...
-│   └── .env                # Variables d'environnement (auto-créé)
-│
-├── web/                    # Frontend (React + Vite)
-│   ├── src/
-│   │   ├── main.tsx        # Point d'entrée
-│   │   ├── App.tsx         # Composant principal
-│   │   └── ...
-│   └── vite.config.ts
-│
-├── db/                     # Base de données
-│   ├── data/               # Data PostgreSQL (géré par le conteneur)
-│   └── migrations/         # Schéma de la BD
-│
-├── .devcontainer/          # Configuration du dev container
-├── .github/                # Configuration GitHub (workflows, CODEOWNERS)
-├── .husky/                 # Git hooks (pré-commit)
-└── package.json            # Dépendances partagées
+L'API appelle un fournisseur compatible avec l'API OpenAI. La configuration se
+fait dans `api/.env` avec `AI_BASE_URL`, `AI_MODEL` et, si nécessaire,
+`AI_API_KEY`. Ne commitez jamais ce fichier ni une clé.
+
+La configuration d'exemple utilise Ollama installé sur la machine hôte :
+
+```dotenv
+AI_BASE_URL=http://host.docker.internal:11434/v1
+AI_MODEL=llama3.2:1b
+AI_API_KEY=
 ```
 
-## ✅ Commandes Essentielles
-
-| Commande               | Rôle                         | Terminal  |
-| ---------------------- | ---------------------------- | --------- |
-| `npm run dev`          | Lance l'API et le frontend   | Conteneur |
-| `npm run lint`         | Vérifie les erreurs ESLint   | Conteneur |
-| `npm run format`       | Formate le code (Prettier)   | Conteneur |
-| `npm run format:check` | Vérifie le formatage (CI)    | Conteneur |
-| `npm run build`        | Compile l'API et le frontend | Conteneur |
-
-**⚠️ Important :** Toujours lancer les commandes `npm` dans le terminal du conteneur, jamais sur votre machine!
-
-## 📖 Workflow Git
-
-### Créer une feature
+Pour télécharger le modèle avec Ollama :
 
 ```bash
-# Créer une branche depuis develop
-git checkout -b feature/ma-feature
-
-# Faire vos changements
-# Commit (le hook pre-commit valide automatiquement)
-git add .
-git commit -m "description claire"
-
-# Pousser
-git push -u origin feature/ma-feature
+ollama pull llama3.2:1b
 ```
 
-### Ouvrir une Pull Request
+Les appels IA ont un délai maximal de 20 secondes. Si le fournisseur est absent,
+indisponible ou trop lent, l'API renvoie un résultat de secours signalé dans
+l'interface. Ce résultat permet de poursuivre la démonstration, mais ne provient
+pas d'une analyse IA.
 
-1. GitHub propose un lien après le `git push`
-2. Créer la PR vers `develop` (branche par défaut)
-3. Remplir le modèle:
-   - **Quoi et pourquoi?** — Décrire la feature
-   - **Comment tester?** — Étapes de test
-   - ✅ Cocher: "Testé dans le dev container" et "Code relu"
-4. La CI tourne (Actions → check `qualite`)
-5. Une fois approuvée + CI verte : **Squash and merge**
-6. Avant la démo : PR de `develop` vers `main` (merge commit)
+## API
 
-## 🧪 Avant de Commiter
+Le contrat complet est décrit dans [`openapi.yaml`](./openapi.yaml).
 
-Vérifiez toujours:
+| Route                 | Usage                                               |
+| --------------------- | --------------------------------------------------- |
+| `GET /api/health`     | Vérifier l'API et PostgreSQL                        |
+| `GET /api/questions`  | Lister les questions enregistrées                   |
+| `POST /api/questions` | Poser une question à l'IA et enregistrer la réponse |
+| `POST /api/verdict`   | Générer une proposition pour une tendance           |
+| `POST /api/brief`     | Générer le brief d'une tendance                     |
+
+Les routes `/api/verdict` et `/api/brief` attendent un identifiant de tendance
+présent dans les données de démonstration. L'API lit ces fiches dans
+[`signals.json`](./web/src/passerelle/data/signals.json).
+
+## Commandes de développement
+
+À exécuter dans le conteneur :
+
+| Commande               | Description                                       |
+| ---------------------- | ------------------------------------------------- |
+| `npm run dev`          | Lancer l'API et l'interface en mode développement |
+| `npm run lint`         | Vérifier le code avec ESLint                      |
+| `npm run format`       | Formater les fichiers avec Prettier               |
+| `npm run format:check` | Vérifier le formatage                             |
+| `npm run build`        | Compiler l'API et construire l'interface          |
+
+Avant de proposer une modification, exécuter :
 
 ```bash
-# Erreurs ESLint?
 npm run lint
-
-# Code bien formaté?
 npm run format:check
-
-# Build réussit?
 npm run build
 ```
 
-Le hook pre-commit le fait automatiquement, mais mieux vaut vérifier d'abord!
+## Structure du dépôt
 
-## 🧠 Fournisseur IA
-
-Par défaut : **Ollama** (local, gratuit).
-
-Pour un autre fournisseur (Mistral, OpenAI…), modifier `api/.env` :
-
-```bash
-# Ollama (par défaut)
-AI_PROVIDER=ollama
-AI_MODEL=llama3.2:1b
-
-# Ou Mistral
-AI_PROVIDER=mistral
-AI_KEY=<votre-clé-api>
+```text
+.
+├── api/
+│   ├── src/index.ts          # Routes Express et appels IA
+│   └── .env.example          # Exemple de configuration locale
+├── db/
+│   ├── init/                 # Schéma et données initiales PostgreSQL
+│   └── data/                 # Données PostgreSQL locales persistantes
+├── docs/adr/                 # Décisions d'architecture
+├── web/
+│   ├── src/passerelle/       # Interface et données de démonstration
+│   └── vite.config.ts        # Serveur Vite et proxy API
+├── .devcontainer/            # Environnement de développement
+├── compose.yaml              # Services dev, PostgreSQL et Ollama
+└── openapi.yaml              # Contrat de l'API
 ```
 
-Voir `api/.env.example` pour la liste complète.
+## Données locales et dépannage
 
-## 🚨 En cas de problème
+- `db/data/` contient les données PostgreSQL persistantes de votre poste et
+  n'est pas versionné. **Ne le supprimez pas et ne le réinitialisez pas pour
+  résoudre un problème sans accord explicite.**
+- Si l'API signale une erreur de connexion à PostgreSQL, vérifiez d'abord
+  <http://localhost:3000/api/health> et l'état des services Compose. Ne supprimez
+  pas le volume ou le dossier de données.
+- Si la génération IA prend du temps, vérifiez qu'Ollama est démarré et que le
+  modèle configuré est disponible. Après 20 secondes, l'application utilise une
+  réponse de secours clairement indiquée.
+- Lancez les commandes `npm` dans le terminal du conteneur pour utiliser le bon
+  environnement et les dépendances installées.
 
-- **`Cannot find native binding`** : les dépendances ont été installées sur votre machine et non dans le conteneur. Relancer `npm ci` dans le terminal du conteneur.
-- **`ECONNREFUSED 127.0.0.1:5432`** : `api/.env` manque. Lancer `cp api/.env.example api/.env`, puis relancer `npm run dev`.
-- **Les questions n'ont pas de réponse** : Ollama ne tourne pas, ou le modèle n'est pas téléchargé. Pour un autre fournisseur, modifier les variables `AI_*` dans `api/.env`.
+## Contribution
 
-## 📚 Ressources
+1. Créez une branche de fonctionnalité depuis `develop`.
+2. Faites vos changements et lancez les vérifications listées ci-dessus.
+3. Créez une pull request vers `develop` en suivant le
+   [modèle du dépôt](./.github/pull_request_template.md).
+4. Attendez la CI et la revue avant de fusionner.
 
-- [CODEOWNERS](.github/CODEOWNERS) — Fichiers sensibles (tech-lead approval requis)
-- [CI/CD workflow](.github/workflows/ci.yml) — Tests automatiques sur chaque PR
-- [QUALITY.md](QUALITY.md) — ESLint, Prettier, hooks pré-commit
-- [SETUP-GUIDE.md](SETUP-GUIDE.md) — Configuration collaboration et Git workflow
+Consultez les [ADR](./docs/adr/) avant de modifier un composant ou d'ajouter une
+dépendance. Toute modification du contrat des routes doit également mettre à
+jour [`openapi.yaml`](./openapi.yaml).
