@@ -3,6 +3,9 @@
   // L'éditeur (VS Code ou Zed) démarre toute la stack, puis s'attache au service « dev »
   "dockerComposeFile": ["../compose.yaml"],
   "service": "dev",
+  // « dev » est derrière un profil dans compose.yaml : le nommer ici l'active.
+  // On ne lance pas api et web : on les démarre soi-même avec `npm run dev`.
+  "runServices": ["dev", "db", "ollama"],
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   "remoteUser": "node",

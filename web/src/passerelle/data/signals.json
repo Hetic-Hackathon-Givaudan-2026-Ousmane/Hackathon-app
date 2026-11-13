@@ -1,0 +1,475 @@
+[
+  {
+    "id": "chocolat-dubai-pistache",
+    "name": "Chocolat de Dubaï et pistache",
+    "hook": "Née dans l'alimentaire, déjà citée en parfumerie",
+    "family": "Gourmande",
+    "ingredient": "pistache",
+    "stage": "hausse",
+    "verdict": "Suivre",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Fait",
+        "date": "2023-12",
+        "excerpt": "Vidéo TikTok virale, décembre 2023",
+        "outlet": "Gulf News, 07/10/2025",
+        "summary": "Le signal naît sur les réseaux sociaux en décembre 2023.",
+        "url": "https://gulfnews.com/"
+      },
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2025-03",
+        "excerpt": "Pic de recherches Google, mars 2025",
+        "outlet": "Gulf News, 07/10/2025",
+        "summary": "L'intérêt du grand public culmine en mars 2025.",
+        "url": "https://gulfnews.com/"
+      },
+      {
+        "type": "press",
+        "label": "Fait",
+        "date": "2025-10-07",
+        "excerpt": "Chocolats fourrés à la pistache : +1 234 % de ventes sur un an (NielsenIQ)",
+        "outlet": "Gulf News, 07/10/2025, d'après NielsenIQ",
+        "summary": "Les ventes confirment la tendance côté produit.",
+        "url": "https://gulfnews.com/"
+      },
+      {
+        "type": "perfume",
+        "label": "Récit",
+        "date": null,
+        "excerpt": "Pistache en parfumerie (Kayali, Prada, Hermès) : date à confirmer",
+        "outlet": "Journal du Luxe",
+        "summary": "La pistache est citée en parfumerie, mais la date n'est pas établie.",
+        "url": "https://journalduluxe.fr/"
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Déc. 2023",
+        "text": "Vidéo TikTok virale",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Automne 2024",
+        "text": "Lancement Lindt en Europe",
+        "reliability": "a-confirmer"
+      },
+      {
+        "lane": "gout",
+        "when": "Mars 2025",
+        "text": "Pic de recherches Google",
+        "reliability": "fait"
+      },
+      {
+        "lane": "parfum",
+        "when": null,
+        "text": "Pistache en parfumerie (Kayali, Prada, Hermès)",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.95,
+    "flow": 0.35,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": false,
+    "fallback": {
+      "justification": "Le signal social précède le pic de plus d'un an, et la pistache apparaît déjà en parfumerie.",
+      "limites": "Le délai goût vers parfum est à confirmer. Le lien avec la parfumerie repose sur un récit de presse dont la date n'est pas établie.",
+      "brief": {
+        "pourquoi": "Le signal apparaît sur les réseaux sociaux plus d'un an avant le pic de recherches (décembre 2023, puis mars 2025).",
+        "fenetre": "À confirmer. Repère du cas : de l'automne 2024 (lancement Lindt en Europe, à confirmer) au pic de recherches Google de mars 2025.",
+        "reserve": "Le lien avec la parfumerie repose sur un récit de presse non confirmé."
+      }
+    }
+  },
+  {
+    "id": "figue-verte",
+    "name": "Figue verte",
+    "hook": "La feuille et le lait de figue reviennent dans les recettes et les desserts.",
+    "family": "Fruitée verte",
+    "ingredient": "figue",
+    "stage": "hausse",
+    "verdict": "Observer",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Récit",
+        "date": "2026-08",
+        "excerpt": "Recettes à la feuille de figuier partagées par des créateurs culinaires",
+        "outlet": "Veille simulée",
+        "summary": "Recettes à la feuille de figuier partagées par des créateurs culinaires.",
+        "url": ""
+      },
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2026-09",
+        "excerpt": "Recherches sur la feuille de figuier en progression régulière",
+        "outlet": "Veille simulée",
+        "summary": "Recherches sur la feuille de figuier en progression régulière.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Août 2026",
+        "text": "Recettes à la feuille de figuier partagées par des créateurs culinaires",
+        "reliability": "recit"
+      },
+      {
+        "lane": "gout",
+        "when": "Sept. 2026",
+        "text": "Recherches sur la feuille de figuier en progression régulière",
+        "reliability": "fait"
+      }
+    ],
+    "signalIntensity": 0.52,
+    "flow": 0.4,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Deux types de sources seulement : un récit sur les réseaux et une hausse de recherches. Le signal monte mais ne peut pas encore justifier un suivi actif.",
+      "limites": "Aucune source presse ou ventes. Délai goût vers parfum à confirmer."
+    }
+  },
+  {
+    "id": "matcha",
+    "name": "Matcha",
+    "hook": "Installé dans les cafés, le matcha cherche sa prochaine forme.",
+    "family": "Verte thé",
+    "ingredient": "matcha",
+    "stage": "pic",
+    "verdict": "Observer",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Fait",
+        "date": "2026-05",
+        "excerpt": "Boissons au matcha très présentes dans les vidéos de cafés",
+        "outlet": "Veille simulée",
+        "summary": "Boissons au matcha très présentes dans les vidéos de cafés.",
+        "url": ""
+      },
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2026-06",
+        "excerpt": "Recherches sur le matcha stables à un niveau élevé",
+        "outlet": "Veille simulée",
+        "summary": "Recherches sur le matcha stables à un niveau élevé.",
+        "url": ""
+      },
+      {
+        "type": "press",
+        "label": "Récit",
+        "date": "2026-07",
+        "excerpt": "Articles sur la saturation de l'offre matcha",
+        "outlet": "Veille simulée",
+        "summary": "Articles sur la saturation de l'offre matcha.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Mai 2026",
+        "text": "Boissons au matcha très présentes dans les vidéos de cafés",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Juin 2026",
+        "text": "Recherches sur le matcha stables à un niveau élevé",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Juil. 2026",
+        "text": "Articles sur la saturation de l'offre matcha",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.8,
+    "flow": 0.02,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Trois types de sources, mais le signal plafonne : les arrivées compensent à peine les départs. Mieux vaut observer la prochaine déclinaison que suivre la vague actuelle.",
+      "limites": "La saturation est un récit de presse, à confirmer par des données de ventes. Délai goût vers parfum à confirmer."
+    }
+  },
+  {
+    "id": "yuzu",
+    "name": "Yuzu",
+    "hook": "L'agrume japonais sort des cartes de chefs pour entrer dans les boissons du quotidien.",
+    "family": "Hespéridée",
+    "ingredient": "yuzu",
+    "stage": "hausse",
+    "verdict": "Suivre",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Fait",
+        "date": "2026-07",
+        "excerpt": "Vidéos de boissons et desserts au yuzu en progression",
+        "outlet": "Veille simulée",
+        "summary": "Vidéos de boissons et desserts au yuzu en progression.",
+        "url": ""
+      },
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2026-08",
+        "excerpt": "Recherches sur le yuzu en hausse continue",
+        "outlet": "Veille simulée",
+        "summary": "Recherches sur le yuzu en hausse continue.",
+        "url": ""
+      },
+      {
+        "type": "press",
+        "label": "Fait",
+        "date": "2026-09",
+        "excerpt": "Lancements de boissons au yuzu en grande distribution",
+        "outlet": "Veille simulée",
+        "summary": "Lancements de boissons au yuzu en grande distribution.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Juil. 2026",
+        "text": "Vidéos de boissons et desserts au yuzu en progression",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Août 2026",
+        "text": "Recherches sur le yuzu en hausse continue",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Sept. 2026",
+        "text": "Lancements de boissons au yuzu en grande distribution",
+        "reliability": "fait"
+      }
+    ],
+    "signalIntensity": 0.7,
+    "flow": 0.7,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Trois types de sources factuelles convergent et les arrivées dépassent nettement les départs. Le yuzu mérite un suivi actif côté goût comme côté parfum.",
+      "limites": "Délai goût vers parfum à confirmer. Les lancements cités ne disent rien des volumes vendus."
+    }
+  },
+  {
+    "id": "safran",
+    "name": "Safran",
+    "hook": "Une épice précieuse qui gagne les pâtisseries et les cocktails.",
+    "family": "Épicée",
+    "ingredient": "safran",
+    "stage": "faible",
+    "verdict": "Observer",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Récit",
+        "date": "2026-09",
+        "excerpt": "Cocktails au safran mis en avant par des bars",
+        "outlet": "Veille simulée",
+        "summary": "Cocktails au safran mis en avant par des bars.",
+        "url": ""
+      },
+      {
+        "type": "press",
+        "label": "Récit",
+        "date": "2026-10",
+        "excerpt": "Chroniques gastronomiques sur le retour du safran",
+        "outlet": "Veille simulée",
+        "summary": "Chroniques gastronomiques sur le retour du safran.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Sept. 2026",
+        "text": "Cocktails au safran mis en avant par des bars",
+        "reliability": "recit"
+      },
+      {
+        "lane": "gout",
+        "when": "Oct. 2026",
+        "text": "Chroniques gastronomiques sur le retour du safran",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.4,
+    "flow": 0.3,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Deux types de sources, toutes deux des récits. Le signal progresse mais aucun fait mesuré ne le confirme encore.",
+      "limites": "Aucune donnée de recherches en ligne. Aucune source factuelle. Délai goût vers parfum à confirmer."
+    }
+  },
+  {
+    "id": "oud-fume",
+    "name": "Oud fumé",
+    "hook": "Une note boisée très présente, qui perd de sa nouveauté.",
+    "family": "Boisée",
+    "ingredient": "oud",
+    "stage": "retombee",
+    "verdict": "Ignorer",
+    "sources": [
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2026-06",
+        "excerpt": "Recherches sur l'oud fumé en recul",
+        "outlet": "Veille simulée",
+        "summary": "Recherches sur l'oud fumé en recul.",
+        "url": ""
+      },
+      {
+        "type": "press",
+        "label": "Récit",
+        "date": "2026-08",
+        "excerpt": "Articles sur la lassitude envers les notes boisées fumées",
+        "outlet": "Veille simulée",
+        "summary": "Articles sur la lassitude envers les notes boisées fumées.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Juin 2026",
+        "text": "Recherches sur l'oud fumé en recul",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Août 2026",
+        "text": "Articles sur la lassitude envers les notes boisées fumées",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.45,
+    "flow": -0.6,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Les départs dépassent les arrivées et les recherches reculent. Le signal ne porte plus de nouveauté à anticiper.",
+      "limites": "Aucune source issue des réseaux sociaux. La lassitude évoquée est un récit à confirmer."
+    }
+  },
+  {
+    "id": "vanille-caramel",
+    "name": "Vanille caramel",
+    "hook": "Un classique gourmand installé partout, sans élan nouveau.",
+    "family": "Gourmande",
+    "ingredient": "vanille",
+    "stage": "retombee",
+    "verdict": "Ignorer",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Fait",
+        "date": "2026-04",
+        "excerpt": "Moins de contenus nouveaux sur les desserts vanille caramel",
+        "outlet": "Veille simulée",
+        "summary": "Moins de contenus nouveaux sur les desserts vanille caramel.",
+        "url": ""
+      },
+      {
+        "type": "search",
+        "label": "Fait",
+        "date": "2026-05",
+        "excerpt": "Recherches sur la vanille caramel en léger recul",
+        "outlet": "Veille simulée",
+        "summary": "Recherches sur la vanille caramel en léger recul.",
+        "url": ""
+      },
+      {
+        "type": "press",
+        "label": "Récit",
+        "date": "2026-06",
+        "excerpt": "Articles sur la banalisation des notes gourmandes classiques",
+        "outlet": "Veille simulée",
+        "summary": "Articles sur la banalisation des notes gourmandes classiques.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Avr. 2026",
+        "text": "Moins de contenus nouveaux sur les desserts vanille caramel",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Mai 2026",
+        "text": "Recherches sur la vanille caramel en léger recul",
+        "reliability": "fait"
+      },
+      {
+        "lane": "gout",
+        "when": "Juin 2026",
+        "text": "Articles sur la banalisation des notes gourmandes classiques",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.6,
+    "flow": -0.4,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Trois types de sources décrivent un classique installé dont l'intérêt s'érode. Rien à anticiper : la place est déjà prise.",
+      "limites": "La banalisation est un récit de presse. Délai goût vers parfum sans objet tant que la tendance recule."
+    }
+  },
+  {
+    "id": "cerise-noire",
+    "name": "Cerise noire",
+    "hook": "Une teinte et un goût qui circulent d'abord dans la mode et le maquillage.",
+    "family": "Fruitée",
+    "ingredient": "cerise",
+    "stage": "faible",
+    "verdict": "Observer",
+    "sources": [
+      {
+        "type": "social",
+        "label": "Récit",
+        "date": "2026-10",
+        "excerpt": "Contenus mode et maquillage autour de la cerise noire",
+        "outlet": "Veille simulée",
+        "summary": "Contenus mode et maquillage autour de la cerise noire.",
+        "url": ""
+      }
+    ],
+    "events": [
+      {
+        "lane": "gout",
+        "when": "Oct. 2026",
+        "text": "Contenus mode et maquillage autour de la cerise noire",
+        "reliability": "recit"
+      }
+    ],
+    "signalIntensity": 0.3,
+    "flow": 0.55,
+    "gustoToPerfumeDelay": null,
+    "isSimulated": true,
+    "fallback": {
+      "justification": "Un seul type de source, un récit sur les réseaux. Le signal est jeune et monte vite, mais rien ne le recoupe encore.",
+      "limites": "Aucune donnée de recherches ni de ventes. Délai goût vers parfum à confirmer."
+    }
+  }
+]

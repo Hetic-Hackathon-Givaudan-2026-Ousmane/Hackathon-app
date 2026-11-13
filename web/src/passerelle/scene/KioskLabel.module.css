@@ -1,0 +1,125 @@
+.label {
+  display: grid;
+  justify-items: start;
+  gap: 0;
+  padding: 6px 12px 6px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink);
+  white-space: nowrap;
+  user-select: none;
+  transition: opacity 150ms ease-out;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--text-body);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.facts {
+  display: flex;
+  gap: 12px;
+  margin-top: 2px;
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+
+.fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+
+.more {
+  display: grid;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font-size: var(--text-small);
+}
+
+.hint {
+  margin-top: 4px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.label[data-mode='hidden'] {
+  opacity: 0;
+}
+
+.label[data-mode='dim'] {
+  opacity: 0.4;
+}
+
+.label[data-mode='active'] {
+  border-color: var(--ink);
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* Petit écran : les étiquettes au repos se chevauchent ; seule l'étiquette active reste. */
+@media (max-width: 599px) {
+  .label[data-mode='rest'],
+  .label[data-mode='dim'] {
+    opacity: 0;
+  }
+}
+
+/* Trait de rappel : relie une pancarte remontée à son stand. */
+.leader {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: 0;
+  background: var(--ink);
+  opacity: 0.35;
+}
+
+.anchor:has(.label[data-mode='hidden']) .leader,
+.anchor:has(.label[data-mode='dim']) .leader {
+  opacity: 0;
+}
+
+/* Stands serrés à l'écran : pancartes plus compactes (texte 14 px minimum). */
+.layer[data-dense='true'] .label {
+  padding: 4px 8px;
+}
+
+.layer[data-dense='true'] .name {
+  gap: 6px;
+  font-size: var(--text-small);
+}
+
+.layer[data-dense='true'] .facts {
+  gap: 8px;
+  margin-top: 0;
+}

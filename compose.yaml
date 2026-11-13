@@ -1,9 +1,14 @@
 # La stack de développement. Versions figées : les mêmes qu'en production.
+#
+# `docker compose up` lance la démonstration : base, IA, API et interface.
+# Le poste de travail « dev » est derrière un profil : le dev container
+# l'active lui-même (voir runServices dans .devcontainer/devcontainer.json).
 name: hackathon
 
 services:
   # Le poste de travail : l'éditeur (VS Code ou Zed) s'y attache, on y lance l'API et le front
   dev:
+    profiles: [devcontainer]
     build:
       context: .
       dockerfile: .devcontainer/Dockerfile
@@ -54,6 +59,58 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+
+  # Télécharge le modèle une fois, puis s'arrête (Ollama démarre sans modèle)
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    restart: 'no'
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    entrypoint:
+      - sh
+      - -c
+      - until ollama list >/dev/null 2>&1; do sleep 2; done; ollama pull ${AI_MODEL:-llama3.2:1b}
+
+  # L'API de la démonstration (voir Dockerfile). Pour un autre fournisseur IA,
+  # définir AI_BASE_URL, AI_MODEL et AI_API_KEY dans un fichier .env à la racine.
+  api:
+    build: .
+    command: npm run start -w api
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgres://app:app@db:5432/app
+      AI_BASE_URL: ${AI_BASE_URL:-http://ollama:11434/v1}
+      AI_MODEL: ${AI_MODEL:-llama3.2:1b}
+      AI_API_KEY: ${AI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://localhost:3000/api/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # L'interface Passerelle : Vite sert le front et relaie /api vers le service api
+  web:
+    build: .
+    command: npm run dev -w web
+    restart: unless-stopped
+    ports:
+      - '5173:5173'
+    environment:
+      API_URL: http://api:3000
+    depends_on:
+      api:
+        condition: service_healthy
 
 volumes:
   ollama_data:

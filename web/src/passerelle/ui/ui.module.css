@@ -1,0 +1,158 @@
+/* Primitives de la charte : boutons, liens, pastilles, cartes. */
+
+/* Boutons : 40 px, coins 4 px, padding 24 px, texte 16 px graisse 400. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 24px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--ink);
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition-property: background-color, color, border-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--soft);
+}
+
+.button:disabled {
+  border-color: var(--line);
+  background: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* Suivre : fond encre, texte blanc. */
+.follow {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.follow:hover:not(:disabled) {
+  background: var(--soft);
+  color: var(--ink);
+}
+
+.follow[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* Observer : fond blanc, contour encre. */
+.watch[aria-pressed='true'] {
+  background: var(--soft);
+}
+
+/* Ignorer : texte seul gris, souligné au survol. */
+.ignore {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.ignore:hover:not(:disabled),
+.ignore[aria-pressed='true'] {
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Action principale des pages Sources et Brief (vert Fait, comme la maquette). */
+.primary {
+  border-color: var(--fact);
+  background: var(--fact);
+  color: var(--white);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--white);
+  color: var(--fact);
+}
+
+.link {
+  display: inline;
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  text-decoration: underline;
+  text-decoration-color: var(--muted);
+  text-underline-offset: 4px;
+  transition-property: color, text-decoration-color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+}
+
+.link:hover {
+  color: var(--muted);
+  text-decoration-color: var(--ink);
+}
+
+/* Pastilles : coins 4 px, contour 1 px, 14 px graisse 500, fond transparent. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--text-small);
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.fact {
+  color: var(--fact);
+}
+
+.press {
+  color: var(--press);
+}
+
+.neutral {
+  color: var(--muted);
+  border-color: var(--line);
+  font-weight: 400;
+}
+
+/* Cartes : angles droits, filet, aucune ombre, fond gris clair au survol. */
+.card {
+  border: 1px solid var(--line);
+  background: var(--white);
+  transition: background-color 150ms ease-out;
+}
+
+.card:hover {
+  background: var(--soft);
+}
+
+.label {
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.value {
+  font-size: var(--text-h3);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.pending {
+  color: var(--press);
+}

@@ -1,0 +1,108 @@
+.bar {
+  position: relative;
+  z-index: var(--z-hud);
+  height: 72px;
+  padding: 0 var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.bar[data-overlay] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  min-width: 0;
+}
+
+.brand {
+  color: var(--ink);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand span {
+  color: var(--muted);
+}
+
+.back {
+  color: var(--muted);
+  font-size: var(--text-small);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav a {
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav a:hover,
+.nav a.active {
+  color: var(--ink);
+}
+
+.nav a.active {
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1px;
+}
+
+.tag {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  .back,
+  .tag {
+    display: none;
+  }
+  .brand {
+    font-size: 20px;
+  }
+  .nav {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 599px) {
+  .brand {
+    font-size: 18px;
+  }
+  /* La marque ramène déjà à la place : le lien redondant est retiré. */
+  .nav a:first-child {
+    display: none;
+  }
+}

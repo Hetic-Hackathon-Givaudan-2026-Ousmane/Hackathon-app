@@ -1,0 +1,9 @@
+.git
+node_modules
+**/node_modules
+**/dist
+.env
+**/.env
+# Données PostgreSQL locales : jamais dans une image
+db/data
+.vite
