@@ -21,13 +21,46 @@ dev container du dépôt.
 
 Le chocolat de Dubaï et pistache est le seul cas présenté comme réel ; les
 autres tendances sont des exemples simulés. Les sources et dates affichées
-doivent être vérifiées avant toute utilisation hors démonstration. Les décisions
-de l'utilisateur et les statuts de vérification sont conservés dans le stockage
-local du navigateur.
+doivent être vérifiées avant toute utilisation hors démonstration.
+
+## Ce qui est réel et ce qui est simulé
+
+| Élément                                       | Statut                                                                                     |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Décisions de l'analyste et statuts de sources | **Réel** : enregistrés dans PostgreSQL par l'API, retrouvés après redémarrage              |
+| Verdict et brief                              | **Réel** si l'IA répond (validé par l'API) ; sinon réponse de secours signalée à l'écran   |
+| Fiches de tendances                           | **Simulé** : fichier `signals.json`, seul le chocolat de Dubaï et pistache est un cas réel |
+| Autres tendances, volumes et dates            | **Simulé**                                                                                 |
 
 ## Démarrage
 
-### Prérequis
+### Démonstration : `docker compose up`
+
+Prérequis : Docker Desktop ou OrbStack. Rien d'autre à installer.
+
+```bash
+git clone https://github.com/Hetic-Hackathon-Givaudan-2026-Ousmane/Hackathon-app.git
+cd Hackathon-app
+docker compose up --build
+```
+
+Cette commande lance la tranche complète : PostgreSQL, Ollama (qui télécharge
+le modèle `llama3.2:1b` au premier démarrage), l'API et l'interface.
+
+- Interface : <http://localhost:5173>
+- API et connexion PostgreSQL : <http://localhost:3000/api/health>
+
+Sans modèle téléchargé ou si l'IA est lente, les verdicts et briefs passent par
+la réponse de secours, signalée à l'écran. Pour un autre fournisseur IA, créez à
+la racine un fichier `.env` (jamais commité) avec `AI_BASE_URL`, `AI_MODEL` et
+`AI_API_KEY`.
+
+Si le dev container est déjà démarré, arrêtez-le d'abord : il occupe déjà les
+ports 3000 et 5173.
+
+### Développement : dev container
+
+#### Prérequis
 
 - Docker Desktop ou OrbStack.
 - Un éditeur compatible avec les dev containers, par exemple VS Code avec
@@ -35,18 +68,15 @@ local du navigateur.
 
 Node.js et PostgreSQL sont fournis par la configuration du conteneur.
 
-### Ouvrir le dépôt dans le conteneur
+#### Ouvrir le dépôt dans le conteneur
 
-```bash
-git clone https://github.com/Hetic-Hackathon-Givaudan-2026-Ousmane/Hackathon-app.git
-cd Hackathon-app
-```
+Après avoir cloné le dépôt :
 
 Dans VS Code, ouvrez le dossier et choisissez **Reopen in Container**. Dans
 Zed, utilisez **Open in Container**. À la première ouverture, le conteneur
 installe les dépendances et crée `api/.env` depuis `api/.env.example`.
 
-### Lancer l'application
+#### Lancer l'application
 
 Dans un terminal **du conteneur** :
 
@@ -90,13 +120,16 @@ pas d'une analyse IA.
 
 Le contrat complet est décrit dans [`openapi.yaml`](./openapi.yaml).
 
-| Route                 | Usage                                               |
-| --------------------- | --------------------------------------------------- |
-| `GET /api/health`     | Vérifier l'API et PostgreSQL                        |
-| `GET /api/questions`  | Lister les questions enregistrées                   |
-| `POST /api/questions` | Poser une question à l'IA et enregistrer la réponse |
-| `POST /api/verdict`   | Générer une proposition pour une tendance           |
-| `POST /api/brief`     | Générer le brief d'une tendance                     |
+| Route                                 | Usage                                                |
+| ------------------------------------- | ---------------------------------------------------- |
+| `GET /api/health`                     | Vérifier l'API et PostgreSQL                         |
+| `GET /api/questions`                  | Lister les questions enregistrées                    |
+| `POST /api/questions`                 | Poser une question à l'IA et enregistrer la réponse  |
+| `POST /api/verdict`                   | Générer une proposition pour une tendance            |
+| `POST /api/brief`                     | Générer le brief d'une tendance                      |
+| `GET /api/journal`                    | Lire les décisions et statuts de sources enregistrés |
+| `PUT /api/journal/decisions/:id`      | Enregistrer la décision de l'analyste                |
+| `PUT /api/journal/sources/:id/:index` | Enregistrer le statut d'une source                   |
 
 Les routes `/api/verdict` et `/api/brief` attendent un identifiant de tendance
 présent dans les données de démonstration. L'API lit ces fiches dans
@@ -137,7 +170,8 @@ npm run build
 │   ├── src/passerelle/       # Interface et données de démonstration
 │   └── vite.config.ts        # Serveur Vite et proxy API
 ├── .devcontainer/            # Environnement de développement
-├── compose.yaml              # Services dev, PostgreSQL et Ollama
+├── compose.yaml              # docker compose up : PostgreSQL, Ollama, API, web
+├── Dockerfile                # Image de l'API et de l'interface (démonstration)
 └── openapi.yaml              # Contrat de l'API
 ```
 

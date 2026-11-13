@@ -267,6 +267,25 @@ const db = new pg.Pool({ connectionString: DATABASE_URL });
 const app = express();
 app.use(express.json());
 
+const journalSchema = readFileSync(
+  fileURLToPath(new URL('../../db/init/003-journal.sql', import.meta.url)),
+  'utf8',
+);
+let journalReady: Promise<unknown> | null = null;
+function ensureJournal() {
+  journalReady ??= db.query(journalSchema).catch((error: unknown) => {
+    journalReady = null; // on retentera à la requête suivante
+    throw error;
+  });
+  return journalReady;
+}
+ensureJournal().catch((error: unknown) =>
+  console.error('[journal] schéma non appliqué :', error),
+);
+
+const verdicts: string[] = ['Suivre', 'Observer', 'Ignorer'];
+const sourceStatuses: string[] = ['verifiee', 'a-confirmer'];
+
 app.get('/api/health', async (_req, res) => {
   const { rows } = await db.query('SELECT version()');
   res.json({ status: 'ok', db: rows[0].version });
@@ -291,6 +310,90 @@ app.post('/api/questions', async (req, res) => {
     [question, answer],
   );
   res.status(201).json(rows[0]);
+});
+
+app.get('/api/journal', async (_req, res) => {
+  await ensureJournal();
+  const [decisionRows, sourceRows] = await Promise.all([
+    db.query('SELECT trend_id, verdict, decided_at FROM journal_decisions'),
+    db.query('SELECT trend_id, source_index, status FROM journal_sources'),
+  ]);
+  const decisions: Record<string, { verdict: string; at: string }> = {};
+  for (const row of decisionRows.rows) {
+    if (!trendsById.has(row.trend_id)) continue;
+    decisions[row.trend_id] = {
+      verdict: row.verdict,
+      at: row.decided_at.toISOString(),
+    };
+  }
+  const sources: Record<string, (string | null)[]> = {};
+  for (const row of sourceRows.rows) {
+    const trend = trendsById.get(row.trend_id);
+    if (!trend || row.source_index >= trend.sources.length) continue;
+    sources[row.trend_id] ??= trend.sources.map(() => null);
+    sources[row.trend_id][row.source_index] = row.status;
+  }
+  res.json({ decisions, sources });
+});
+
+app.put('/api/journal/decisions/:id', async (req, res) => {
+  const trend = trendsById.get(req.params.id);
+  if (!trend) {
+    res.status(404).json({ erreur: 'Tendance inconnue' });
+    return;
+  }
+  const verdict: unknown = req.body?.verdict;
+  if (typeof verdict !== 'string' || !verdicts.includes(verdict)) {
+    res.status(400).json({ erreur: 'Décision invalide' });
+    return;
+  }
+  await ensureJournal();
+  const { rows } = await db.query(
+    `INSERT INTO journal_decisions (trend_id, verdict) VALUES ($1, $2)
+     ON CONFLICT (trend_id)
+     DO UPDATE SET verdict = EXCLUDED.verdict, decided_at = now()
+     RETURNING verdict, decided_at`,
+    [trend.id, verdict],
+  );
+  res.json({ verdict: rows[0].verdict, at: rows[0].decided_at.toISOString() });
+});
+
+app.put('/api/journal/sources/:id/:index', async (req, res) => {
+  const trend = trendsById.get(req.params.id);
+  const index = Number(req.params.index);
+  if (
+    !trend ||
+    !Number.isInteger(index) ||
+    index < 0 ||
+    index >= trend.sources.length
+  ) {
+    res.status(404).json({ erreur: 'Source inconnue' });
+    return;
+  }
+  const status: unknown = req.body?.status;
+  if (
+    status !== null &&
+    (typeof status !== 'string' || !sourceStatuses.includes(status))
+  ) {
+    res.status(400).json({ erreur: 'Statut invalide' });
+    return;
+  }
+  await ensureJournal();
+  if (status === null) {
+    await db.query(
+      'DELETE FROM journal_sources WHERE trend_id = $1 AND source_index = $2',
+      [trend.id, index],
+    );
+  } else {
+    await db.query(
+      `INSERT INTO journal_sources (trend_id, source_index, status)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (trend_id, source_index)
+       DO UPDATE SET status = EXCLUDED.status`,
+      [trend.id, index, status],
+    );
+  }
+  res.json({ status });
 });
 
 app.post('/api/verdict', async (req, res) => {

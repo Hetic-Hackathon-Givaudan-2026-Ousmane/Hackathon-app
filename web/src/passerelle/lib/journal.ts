@@ -3,7 +3,8 @@ import type { Verdict } from '../data/types.ts';
 
 /**
  * Journal de l'analyste : décisions et vérification des sources, par tendance.
- * Conservé dans le navigateur ; l'application fonctionne aussi si le stockage est bloqué.
+ * Enregistré dans PostgreSQL via l'API ; le navigateur garde une copie locale,
+ * utilisée seulement si l'API ne répond pas.
  */
 export type SourceStatus = 'verifiee' | 'a-confirmer' | null;
 
@@ -36,6 +37,41 @@ function commit(next: JournalState) {
   listeners.forEach((l) => l());
 }
 
+function isJournalState(value: unknown): value is JournalState {
+  if (typeof value !== 'object' || value === null) return false;
+  const v = value as Record<string, unknown>;
+  return (
+    typeof v.decisions === 'object' &&
+    v.decisions !== null &&
+    typeof v.sources === 'object' &&
+    v.sources !== null
+  );
+}
+
+// L'état de la base remplace la copie locale dès que l'API répond
+async function hydrate() {
+  try {
+    const res = await fetch('/api/journal');
+    if (!res.ok) return;
+    const data: unknown = await res.json();
+    if (isJournalState(data)) commit(data);
+  } catch {
+    /* API indisponible : on garde la copie locale */
+  }
+}
+
+function save(path: string, body: unknown) {
+  fetch(path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  }).catch(() => {
+    /* la copie locale reste à jour */
+  });
+}
+
+void hydrate();
+
 export const journal = {
   setDecision(id: string, verdict: Verdict) {
     commit({
@@ -45,6 +81,7 @@ export const journal = {
         [id]: { verdict, at: new Date().toISOString() },
       },
     });
+    save(`/api/journal/decisions/${encodeURIComponent(id)}`, { verdict });
   },
   setSourceStatus(
     id: string,
@@ -58,6 +95,7 @@ export const journal = {
       i === index ? status : (current[i] ?? null),
     );
     commit({ ...state, sources: { ...state.sources, [id]: list } });
+    save(`/api/journal/sources/${encodeURIComponent(id)}/${index}`, { status });
   },
 };
 

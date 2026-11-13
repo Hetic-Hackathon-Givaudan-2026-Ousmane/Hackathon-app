@@ -109,8 +109,138 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TrendError'
+  /api/journal:
+    get:
+      operationId: getJournal
+      summary: Lire les décisions et les statuts de sources enregistrés
+      responses:
+        '200':
+          description: État du journal de l'analyste, par identifiant de tendance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journal'
+  /api/journal/decisions/{id}:
+    put:
+      operationId: setJournalDecision
+      summary: Enregistrer la décision de l'analyste pour une tendance
+      parameters:
+        - $ref: '#/components/parameters/TrendId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [verdict]
+              properties:
+                verdict:
+                  type: string
+                  enum: [Suivre, Observer, Ignorer]
+      responses:
+        '200':
+          description: Décision enregistrée, remplaçant la précédente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JournalDecision'
+        '400':
+          description: Décision invalide.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
+        '404':
+          description: Identifiant de tendance inconnu.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
+  /api/journal/sources/{id}/{index}:
+    put:
+      operationId: setJournalSourceStatus
+      summary: Enregistrer le statut de vérification d'une source
+      parameters:
+        - $ref: '#/components/parameters/TrendId'
+        - name: index
+          in: path
+          required: true
+          description: Position de la source dans la fiche, à partir de 0.
+          schema:
+            type: integer
+            minimum: 0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: [string, 'null']
+                  enum: [verifiee, a-confirmer, null]
+                  description: '`null` retire le statut.'
+      responses:
+        '200':
+          description: Statut enregistré.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:
+                    type: [string, 'null']
+                    enum: [verifiee, a-confirmer, null]
+        '400':
+          description: Statut invalide.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
+        '404':
+          description: Tendance ou source inconnue.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrendError'
 components:
+  parameters:
+    TrendId:
+      name: id
+      in: path
+      required: true
+      description: Identifiant d'une fiche Passerelle.
+      schema:
+        type: string
   schemas:
+    Journal:
+      type: object
+      required: [decisions, sources]
+      properties:
+        decisions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/JournalDecision'
+        sources:
+          type: object
+          description: Statuts par tendance, dans l'ordre des sources de la fiche.
+          additionalProperties:
+            type: array
+            items:
+              type: [string, 'null']
+              enum: [verifiee, a-confirmer, null]
+    JournalDecision:
+      type: object
+      required: [verdict, at]
+      properties:
+        verdict:
+          type: string
+          enum: [Suivre, Observer, Ignorer]
+        at:
+          type: string
+          format: date-time
     Health:
       type: object
       required:
